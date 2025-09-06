@@ -10,14 +10,17 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app, origins=["https://symmetrical-doodle-jj56q4r9p6g9cpjg5-3000.app.github.dev"])
 
 # from models import Person
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../dist/')
-app = Flask(__name__)
-app.url_map.strict_slashes = False
+ 
 
 # database condiguration
 db_url = os.getenv("DATABASE_URL")
@@ -64,6 +67,8 @@ def serve_any_other_file(path):
     response = send_from_directory(static_file_dir, path)
     response.cache_control.max_age = 0  # avoid cache memory
     return response
+
+
 
 
 # this only runs if `$ python src/main.py` is executed
